@@ -2,28 +2,25 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	// .envファイルから環境変数の読み込み
-	err := godotenv.Load()
+  environment := os.Getenv("ENV")
+  if environment == "PRODUCTION" {
+    gin.SetMode(gin.ReleaseMode)
+  }
 
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
+  router := gin.Default()
+  router.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{"message": "Hello, World"})
+  })
 
-	// 環境変数の取得
-	test_string := os.Getenv("TEST_STRING")
 
-	r := gin.Default()
-		r.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"test_string": test_string,
-			})
-		})
-		r.Run()
+  if err := router.Run(":8080"); err != nil {
+		log.Fatal("Server failed: ", err)
+  }
 }
