@@ -1,4 +1,4 @@
-name: Cloud Deploy to Cloud Run
+name: Deploy
 
 on:
   push:
@@ -22,22 +22,25 @@ jobs:
       - id: "auth"
         uses: "google-github-actions/auth@v0"
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
 
       - name: Configure docker to use the gcloud cli
         run: gcloud auth configure-docker --quiet
 
       - name: Build a docker image
-        run: docker build -t ${{ env.IMAGE }}
+        run: docker build -t ${{ env.IMAGE }} .
+
+      - name: Push the docker image
+        run: docker push ${{ env.IMAGE }}
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy $SERVICE_NAME \
-          --image $IMAGE \
-          --port $PORT \
-          --project $GCP_PROJECT_ID \
-          --region $GCP_REGION \
-          --platform=managed \
-          --allow-unauthenticated \
-          --quiet \
-          --set-env-vars=ENV=PRODUCTION
+            --image $IMAGE \
+            --port $PORT \
+            --project $GCP_PROJECT_ID \
+            --region $GCP_REGION \
+            --platform=managed \
+            --allow-unauthenticated \
+            --quiet \
+            --set-env-vars=ENV=PRODUCTION
