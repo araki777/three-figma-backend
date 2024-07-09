@@ -1,0 +1,23 @@
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.so
+
+# Folders
+_obj
+_test
+vendor/
+node_modules/
+
+# Output files
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Ignore the dotenv file
+.env
+
+# Ignore Go binary
+*.exe
