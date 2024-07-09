@@ -40,7 +40,7 @@ jobs:
             --port $PORT \
             --project $GCP_PROJECT_ID \
             --region $GCP_REGION \
-            --platform=managed \
+            --platform=linux/amd64 \
             --allow-unauthenticated \
             --quiet \
             --set-env-vars=ENV=PRODUCTION
